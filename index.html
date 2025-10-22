@@ -1,24 +1,40 @@
-{% extends "base.html" %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Brain Tumor Detection</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; text-align: center; }
+        .container { max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 10px; }
+        img { max-width: 100%; height: auto; margin-top: 20px; }
+        .result { font-size: 1.5em; font-weight: bold; margin-top: 20px; }
+        .error { color: red; font-weight: bold; }
+    </style>
+</head>
+<body>
 
-{% block title %}Home - Tumor Detection{% endblock %}
+    <div class="container">
+        <h2>Brain Tumor Classifier</h2>
+        <p>Upload an image to classify if it contains a tumor.</p>
 
-{% block content %}
-    <h1>Brain Tumor Detection</h1>
+        <form method="post" enctype="multipart/form-data">
+            <input type="file" name="image" required>
+            <input type="submit" value="Upload & Classify">
+        </form>
 
-    <form method="POST" enctype="multipart/form-data">
-        <input type="file" name="image" required>
-        <button type="submit">Predict</button>
-    </form>
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
 
-    {% if error %}
-        <p class="error">{{ error }}</p>
-    {% endif %}
+        {% if result %}
+            <div class="result">
+                <p>Result: <span style="color: {% if result == 'Tumor' %}red{% else %}green{% endif %};">{{ result }}</span></p>
+                <p>Confidence: {{ confidence }}%</p>
+            </div>
+            <img src="{{ image_path }}" alt="Uploaded Image">
+        {% endif %}
+    </div>
 
-    {% if result %}
-        <div class="result">
-            <h3>Prediction: {{ result }}</h3>
-            <p>Confidence: {{ confidence }}%</p>
-            <img src="{{ image_path }}" alt="Uploaded Image" class="uploaded-img">
-        </div>
-    {% endif %}
-{% endblock %}
+</body>
+</html>
